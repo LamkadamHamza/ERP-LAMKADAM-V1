@@ -6,4 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FournisseurRepository extends JpaRepository<Fournisseur,Integer> {
+
+    boolean existsByFOURNCODEINT(int id);
+    void deleteByFOURNCODEINT(int id);
+
 }

@@ -2,10 +2,9 @@ package com.lamkadam.fournisseurservice.web;
 
 import com.lamkadam.fournisseurservice.entities.Fournisseur;
 import com.lamkadam.fournisseurservice.repository.FournisseurRepository;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.lamkadam.fournisseurservice.service.FournisseurService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,9 +14,11 @@ import java.util.List;
 public class FournisseurController {
 
     private FournisseurRepository fournisseurRepository;
+    private FournisseurService fournisseurService;
 
-    public FournisseurController(FournisseurRepository fournisseurRepository) {
+    public FournisseurController(FournisseurRepository fournisseurRepository, FournisseurService fournisseurService) {
         this.fournisseurRepository = fournisseurRepository;
+        this.fournisseurService = fournisseurService;
     }
 
 
@@ -26,4 +27,12 @@ public class FournisseurController {
         List<Fournisseur> fournisseurs = fournisseurRepository.findAll();
         return fournisseurs;
     }
+
+
+    @DeleteMapping("/fournisseurs/{id}")
+    public void DeleteFournisseur(@PathVariable int id)  {
+       fournisseurService.deleteFournisseur(id);
+
+    }
+
 }
