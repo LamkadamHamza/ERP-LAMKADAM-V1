@@ -1,6 +1,7 @@
 package com.lamkadam.productservice.web;
 
 
+import com.lamkadam.productservice.clients.FournisseurRestClient;
 import com.lamkadam.productservice.dtos.ProductDTO;
 import com.lamkadam.productservice.entities.Product;
 import com.lamkadam.productservice.exceptions.ProductAlreadyExistException;
@@ -21,6 +22,7 @@ public class ProductController {
 
     private ProductService productService;
     private ProductMapper productMapper;
+    private FournisseurRestClient fournisseurRestClient;
 
 
 
@@ -32,6 +34,10 @@ public class ProductController {
         List<Product> products = productDTOS.stream()
                 .map(productMapper::from)
                 .collect(Collectors.toList());
+
+        products.forEach(four ->{
+            four.setFournisseur(fournisseurRestClient.findFournisseurById((long) four.getFOURNCODEINT()));
+        });
         return products;
     }
 
@@ -64,5 +70,11 @@ public class ProductController {
     public void DeleteProduct(@PathVariable String id) throws ProductNotFoundException {
 
         productService.deleteProduct(id);
+    }
+
+
+    @PutMapping("/{productId}/assignCategory/{categoryId}")
+    public ProductDTO assignCategoryToProduct(@PathVariable String productId, @PathVariable Long categoryId) {
+        return productService.assignCategoryToProduct(productId, categoryId);
     }
 }

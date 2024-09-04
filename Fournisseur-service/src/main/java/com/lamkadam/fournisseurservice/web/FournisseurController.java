@@ -28,6 +28,12 @@ public class FournisseurController {
         return fournisseurs;
     }
 
+    @GetMapping("/fournisseurs/{code}")
+    public  Fournisseur getFournisseurById(@PathVariable int code){
+        Fournisseur fournisseur = fournisseurService.findfournisseurById(code);
+        return fournisseur;
+    }
+
 
     @DeleteMapping("/fournisseurs/{id}")
     public void DeleteFournisseur(@PathVariable int id)  {

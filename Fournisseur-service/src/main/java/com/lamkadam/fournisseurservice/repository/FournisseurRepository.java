@@ -10,4 +10,6 @@ public interface FournisseurRepository extends JpaRepository<Fournisseur,Integer
     boolean existsByFOURNCODEINT(int id);
     void deleteByFOURNCODEINT(int id);
 
+    Fournisseur findFournisseurByFOURNCODEINTIs(int code);
+
 }

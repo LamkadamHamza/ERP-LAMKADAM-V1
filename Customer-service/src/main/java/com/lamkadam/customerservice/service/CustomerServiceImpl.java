@@ -48,13 +48,13 @@ public class CustomerServiceImpl  implements CustomerService{
 
     @Override
     public CustomerDTO updateCustomer(CustomerDTO customerDTO) throws CustomerNotFoundException, EmailAlreadyUsedException {
-        if(customerRepository.checkIfEmailExist(customerDTO.getEmail()))
-            throw  new EmailAlreadyUsedException(String.format("this email %s is already used",customerDTO.getEmail() ));
+
          Customer customer = customerRepository.findById(customerDTO.getId()).orElse(null);
          if(customer == null) throw  new CustomerNotFoundException(String.format("Castomer not found : %S" ,customerDTO.getId()));
         if (customerDTO.getFirstname() != null) customer.setFirstname(customerDTO.getFirstname());
         if(customerDTO.getLastname() != null) customer.setLastname(customerDTO.getLastname());
         if(customerDTO.getEmail() !=null) customer.setEmail(customerDTO.getEmail());
+        if(customerDTO.getGenre() !=null) customer.setGenre(customerDTO.getGenre());
 
           Customer customerSaved = customerRepository.save(customer);
         return customerMapper.from(customerSaved);

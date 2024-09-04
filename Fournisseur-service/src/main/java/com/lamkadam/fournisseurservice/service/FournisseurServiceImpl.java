@@ -28,4 +28,11 @@ public class FournisseurServiceImpl  implements FournisseurService{
         Fournisseur fournisseur = fournisseurRepository.findById(FOURNCODEINT).orElse(null);
         fournisseurRepository.delete(fournisseur);
     }
+
+    @Override
+    public Fournisseur findfournisseurById(int code) {
+        Fournisseur fournisseur = fournisseurRepository.findFournisseurByFOURNCODEINTIs(code);
+
+        return fournisseur;
+    }
 }

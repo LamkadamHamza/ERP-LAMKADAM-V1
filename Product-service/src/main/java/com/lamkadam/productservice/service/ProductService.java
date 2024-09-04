@@ -19,4 +19,7 @@ public interface ProductService {
     void deleteProduct(String id) throws  ProductNotFoundException;
 
     List<ProductDTO>  findProduct(String kw);
+
+    public ProductDTO assignCategoryToProduct(String productId, Long categoryId);
+
 }

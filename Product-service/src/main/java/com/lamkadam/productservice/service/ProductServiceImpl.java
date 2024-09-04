@@ -1,10 +1,13 @@
 package com.lamkadam.productservice.service;
 
+import com.lamkadam.productservice.clients.FournisseurRestClient;
 import com.lamkadam.productservice.dtos.ProductDTO;
+import com.lamkadam.productservice.entities.Categorie;
 import com.lamkadam.productservice.entities.Product;
 import com.lamkadam.productservice.exceptions.ProductAlreadyExistException;
 import com.lamkadam.productservice.exceptions.ProductNotFoundException;
 import com.lamkadam.productservice.mappers.ProductMapper;
+import com.lamkadam.productservice.repository.CategorieRepository;
 import com.lamkadam.productservice.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -20,7 +23,8 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl  implements ProductService {
 
     private ProductRepository productRepository;
-
+    private CategorieRepository categorieRepository;
+    private FournisseurRestClient fournisseurRestClient;
     private ProductMapper productMapper;
 
     @Override
@@ -36,7 +40,10 @@ public class ProductServiceImpl  implements ProductService {
     @Override
     public List<ProductDTO> GetListProduct() {
         List<ProductDTO> productDTOList =productRepository.findAll().stream().map(productMapper ::from).collect(Collectors.toList());
-
+            productDTOList.forEach(f->{
+                f.setFournisseur(fournisseurRestClient.findFournisseurById((long) f.getFOURNCODEINT()));
+                
+            });
         return productDTOList;
     }
 
@@ -70,5 +77,16 @@ public class ProductServiceImpl  implements ProductService {
     @Override
     public List<ProductDTO> findProduct(String kw) {
         return null;
+    }
+
+    @Override
+    public ProductDTO assignCategoryToProduct(String productId, Long categoryId) {
+        Product product = productRepository.findById(productId).orElse(null);
+        Categorie categorie = categorieRepository.findById(categoryId).orElse(null);
+        product.setCategorie(categorie); // assuming you have a setCategorie method
+       Product productsaved = productRepository.save(product);
+
+
+        return productMapper.from(productsaved);
     }
 }
